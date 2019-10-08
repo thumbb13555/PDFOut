@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     String[] S = {"o", "K", "c", "w", "q", "c", "t", "w", "x", "z"};
     String[] T = {"o", "K", "c", "w", "q", "c", "t", "w", "x", "z"};
 
+    PdfPTable table;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,9 +117,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             document.add(tabbbb);
+            int input  = Integer.parseInt(mTextEt2.getText().toString())-1;
             int start;
-            int end;
-            for (int i = 0; i <= f.length-1; ) {
+            int end = 0;
+            for (int i = 0; i <= input; ) {
                 start = (i) + 1;
                 i++;
                 end = i;
@@ -128,6 +130,18 @@ public class MainActivity extends AppCompatActivity {
                 ct.addElement(c);
                 ct.addElement(createTable(start, end));
             }
+            //補格子
+            if(end%138 >0){
+                int func = ((end/138)+1)*138;
+                Log.v("BT","餘數: "+ end/138+" ,每頁的滿行: "+func);
+                Log.v("BT","End = "+end+" ,func: "+ func);
+                for (int i = 0;i<func-end;i++){
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                }
+            }
+
             int column = 0;
             do {
                 if (column == 3) {
@@ -170,18 +184,19 @@ public class MainActivity extends AppCompatActivity {
     };//192是第一區塊的寬度
 
     public PdfPTable createTable(int start, int end) throws IOException {
-        PdfPTable table = new PdfPTable(3);
+        table = new PdfPTable(3);
         table.setWidthPercentage(100);
         table.setHorizontalAlignment(Element.ALIGN_RIGHT);
         for (int i = start; i <= end; i++) {
-//            table.addCell(String.valueOf(i));
-//            table.addCell("Test" + i);
-//            table.addCell("Data");
+            table.addCell(String.valueOf(i));
+            table.addCell("Test" + i);
+            table.addCell("Data");
 
-            table.addCell(f[i-1]);
-            table.addCell(S[i-1]);
-            table.addCell(T[i-1]);
+//            table.addCell(f[i-1]);
+//            table.addCell(S[i-1]);
+//            table.addCell(T[i-1]);
         }
+
 
         return table;
     }
